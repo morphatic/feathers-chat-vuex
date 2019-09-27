@@ -1,29 +1,39 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <main id="app">
+    <router-view />
+  </main>
 </template>
 
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-#nav {
-  padding: 30px;
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-    &.router-link-exact-active {
-      color: #42b983;
+<script>
+  import '@/styles/base.css'
+  import '@/styles/chat.css'
+  import { mapState } from 'vuex'
+  export default {
+    name: 'app',
+    computed: {
+      ...mapState('auth', ['user'])
+    },
+    watch: {
+      user (loggedInUser) {
+        if (loggedInUser) {
+          this.$router.replace({ name: 'Chat' })
+        } else {
+          this.$router.replace({ name: 'Login' })
+        }
+      }
+    },
+    mounted () {
+      this.$store.dispatch('auth/authenticate').catch(error => {
+        if (!error.message.includes('No accessToken found in storage')) {
+          console.error(error)
+        }
+      })
     }
   }
-}
+</script>
+
+<style lang="sass">
+#app
+  -webkit-font-smoothing: antialiased
+  -moz-osx-font-smoothing: grayscale
 </style>
