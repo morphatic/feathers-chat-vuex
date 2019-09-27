@@ -9,7 +9,7 @@
   import '@/styles/chat.css'
   import { mapState } from 'vuex'
   export default {
-    name: 'app',
+    name: 'App',
     computed: {
       ...mapState('auth', ['user'])
     },
